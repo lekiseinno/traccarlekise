@@ -1,44 +1,52 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-
-    defaultConfig {
-        applicationId "org.traccar.client"
-        buildConfigField "boolean", "HIDDEN_APP", "false"
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 55
-        versionName '5.18'
+    signingConfigs {
+        config {
+            keyAlias 'key_lekise_traccar'
+            keyPassword 'Passw0rd@1'
+            storeFile file('C:/Users/PCINNO002PLUS/.android/lekise_keystore.jks')
+            storePassword 'Passw0rd@1'
+        }
     }
-
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "org.traccarlekise.client"
+        buildConfigField "boolean", "HIDDEN_APP", "false"
+        minSdkVersion 21
+        targetSdkVersion 28
+        signingConfig signingConfigs.config
+    }
     lintOptions {
         checkReleaseBuilds false
     }
-
     flavorDimensions "default"
     productFlavors {
         regular
         google
         hidden {
-            applicationId "org.traccar.client.hidden"
+            applicationId "org.traccarlekise.client.hidden"
             buildConfigField "boolean", "HIDDEN_APP", "true"
         }
     }
-
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
     }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.config
+        }
+    }
 }
 
 dependencies {
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:4.1'
-    googleImplementation 'com.google.firebase:firebase-core:16.0.6'
-    googleImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    testImplementation 'junit:junit:4.13-beta-2'
+    testImplementation 'org.robolectric:robolectric:4.3-alpha-2'
+    googleImplementation 'com.google.firebase:firebase-core:16.0.8'
+    googleImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
     googleImplementation "com.google.android.gms:play-services-location:16.0.0"
 }
 
@@ -49,8 +57,8 @@ if (getGradle().getStartParameter().getTaskRequests().toString().contains("Googl
     task copyJson(type: Copy) {
         from '../../traccar-shared/google-services'
         into '.'
-        include 'traccar-client-android.json'
-        rename('traccar-client-android.json', 'google-services.json')
+        include 'traccarlekise-client-android.json'
+        rename('traccarlekise-client-android.json', 'google-services.json')
     }
 
     afterEvaluate {
